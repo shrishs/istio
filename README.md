@@ -4,16 +4,18 @@
 - Install the following example
 https://docs.openshift.com/container-platform/3.11/servicemesh-install/servicemesh-install.html#installing-bookinfo-application
 
-- git clone https://github.com/nicholasjackson/mtls-go-example
+```
+ git clone https://github.com/nicholasjackson/mtls-go-example
 
-- cd mtls-go-example
+ cd mtls-go-example
 
-- ./generate.sh istio-singressgateway-istio-system.apps.82c0.example.opentlc.com xxxxxxxx
+ ./generate.sh istio-singressgateway-istio-system.apps.82c0.example.opentlc.com xxxxxxxx
 
-- mkdir istio-singressgateway-istio-system.apps.82c0.example.opentlc.com
+ mkdir istio-singressgateway-istio-system.apps.82c0.example.opentlc.com
 
-- mv 1_root 2_intermediate 3_application 4_client istio-singressgateway-istio-system.apps.82c0.example.opentlc.com
-
+ mv 1_root 2_intermediate 3_application 4_client istio-singressgateway-istio-system.apps.82c0.example.opentlc.com
+```
+- Create the passhrough route on the existing openshift-istio service(istio-ingressgateway).
 ```
 oc create route passthrough istio-singressgateway --hostname=istio-singressgateway-istio-system.apps.82c0.example.opentlc.com --service=istio-ingressgateway --port=443 -n istio-system
 ```
