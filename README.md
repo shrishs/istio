@@ -11,14 +11,16 @@
 
 -- mv 1_root 2_intermediate 3_application 4_client istio-singressgateway-istio-system.apps.82c0.example.opentlc.com
 
--- oc create route passthrough istio-singressgateway --hostname=istio-singressgateway-istio-system.apps.82c0.example.opentlc.com --service=istio-ingressgateway --port=443 -n istio-system
-
+```
+oc create route passthrough istio-singressgateway --hostname=istio-singressgateway-istio-system.apps.82c0.example.opentlc.com --service=istio-ingressgateway --port=443 -n istio-system
+```
 ## Configure a TLS ingress gateway
 
--- oc create -n istio-system secret tls istio-ingressgateway-certs --key 3_application/private/istio-singressgateway-istio-system.apps.82c0.example.opentlc.com.key.pem --cert 3_application/certs/istio-singressgateway-istio-system.apps.82c0.example.opentlc.com.cert.pem
-
+```
+oc create -n istio-system secret tls istio-ingressgateway-certs --key 3_application/private/istio-singressgateway-istio-system.apps.82c0.example.opentlc.com.key.pem --cert 3_application/certs/istio-singressgateway-istio-system.apps.82c0.example.opentlc.com.cert.pem
+```
 -- Gateway definition is as follows.Make sure tls information is added for the corresponding host in server section.
-
+```
 apiVersion: v1
 items:
 - apiVersion: networking.istio.io/v1alpha3
@@ -52,15 +54,19 @@ kind: List
 metadata:
   resourceVersion: ""
   selfLink: ""
-
+```
 
 -- Check the browser
    https://istio-singressgateway-istio-system.apps.82c0.example.opentlc.com/productpage
 
--- export INGRESS_HOST=$(oc -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
--- curl -v -HHost:istio-singressgateway-istio-system.apps.82c0.example.opentlc.com --resolve istio-singressgateway-istio-system.apps.82c0.example.opentlc.com:443:$INGRESS_HOST --cacert 2_intermediate/certs/ca-chain.cert.pem https://istio-singressgateway-istio-system.apps.82c0.example.opentlc.com/productpage
-
-``` curl -v -HHost:istio-singressgateway-istio-system.apps.82c0.example.opentlc.com --resolve istio-singressgateway-istio-system.apps.82c0.example.opentlc.com:443:$INGRESS_HOST --cacert 2_intermediate/certs/ca-chain.cert.pem https://istio-singressgateway-istio-system.apps.82c0.example.opentlc.com/productpage
+``` 
+export INGRESS_HOST=$(oc -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+```
+```
+curl -v -HHost:istio-singressgateway-istio-system.apps.82c0.example.opentlc.com --resolve istio-singressgateway-istio-system.apps.82c0.example.opentlc.com:443:$INGRESS_HOST --cacert 2_intermediate/certs/ca-chain.cert.pem https://istio-singressgateway-istio-system.apps.82c0.example.opentlc.com/productpage
+```
+``` 
+curl -v -HHost:istio-singressgateway-istio-system.apps.82c0.example.opentlc.com --resolve istio-singressgateway-istio-system.apps.82c0.example.opentlc.com:443:$INGRESS_HOST --cacert 2_intermediate/certs/ca-chain.cert.pem https://istio-singressgateway-istio-system.apps.82c0.example.opentlc.com/productpage
 * Added istio-singressgateway-istio-system.apps.82c0.example.opentlc.com:443:172.29.162.78 to DNS cache
 * About to connect() to istio-singressgateway-istio-system.apps.82c0.example.opentlc.com port 443 (#0)
 *   Trying 172.29.162.78...
