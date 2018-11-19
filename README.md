@@ -1,4 +1,4 @@
-## istio mTLS
+# istio mTLS
 -- This example is based upon https://istio.io/docs/tasks/traffic-management/secure-ingress/
 
 -- git clone https://github.com/nicholasjackson/mtls-go-example
@@ -13,7 +13,7 @@
 
 -- oc create route passthrough istio-singressgateway --hostname=istio-singressgateway-istio-system.apps.82c0.example.opentlc.com --service=istio-ingressgateway --port=443 -n istio-system
 
-** Configure a TLS ingress gateway
+## Configure a TLS ingress gateway
 
 -- oc create -n istio-system secret tls istio-ingressgateway-certs --key 3_application/private/istio-singressgateway-istio-system.apps.82c0.example.opentlc.com.key.pem --cert 3_application/certs/istio-singressgateway-istio-system.apps.82c0.example.opentlc.com.cert.pem
 
@@ -60,7 +60,7 @@ metadata:
 -- export INGRESS_HOST=$(oc -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 -- curl -v -HHost:istio-singressgateway-istio-system.apps.82c0.example.opentlc.com --resolve istio-singressgateway-istio-system.apps.82c0.example.opentlc.com:443:$INGRESS_HOST --cacert 2_intermediate/certs/ca-chain.cert.pem https://istio-singressgateway-istio-system.apps.82c0.example.opentlc.com/productpage
 
--- curl -v -HHost:istio-singressgateway-istio-system.apps.82c0.example.opentlc.com --resolve istio-singressgateway-istio-system.apps.82c0.example.opentlc.com:443:$INGRESS_HOST --cacert 2_intermediate/certs/ca-chain.cert.pem https://istio-singressgateway-istio-system.apps.82c0.example.opentlc.com/productpage
+``` curl -v -HHost:istio-singressgateway-istio-system.apps.82c0.example.opentlc.com --resolve istio-singressgateway-istio-system.apps.82c0.example.opentlc.com:443:$INGRESS_HOST --cacert 2_intermediate/certs/ca-chain.cert.pem https://istio-singressgateway-istio-system.apps.82c0.example.opentlc.com/productpage
 * Added istio-singressgateway-istio-system.apps.82c0.example.opentlc.com:443:172.29.162.78 to DNS cache
 * About to connect() to istio-singressgateway-istio-system.apps.82c0.example.opentlc.com port 443 (#0)
 *   Trying 172.29.162.78...
@@ -86,15 +86,14 @@ metadata:
 < server: envoy
 < date: Mon, 19 Nov 2018 05:58:58 GMT
 < x-envoy-upstream-service-time: 38
-
-----------
-** Configure a mutual TLS ingress gateway
+```
+## Configure a mutual TLS ingress gateway
 - Create secret with ca cert.
 oc create -n istio-system secret generic istio-ingressgateway-ca-certs --from-file=2_intermediate/certs/ca-chain.cert.pem
 
 
 - Change the gateway definition to mutualTLS
-
+```
 apiVersion: v1
 items:
 - apiVersion: networking.istio.io/v1alpha3
@@ -124,11 +123,11 @@ items:
         privateKey: /etc/istio/ingressgateway-certs/tls.key
         serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
 kind: List
-
+```
 
 - Try the same command above and it will fail as it require client certificate.
 
-- curl -v -HHost:istio-singressgateway-istio-system.apps.82c0.example.opentlc.com --resolve istio-singressgateway-istio-system.apps.82c0.example.opentlc.com:443:$INGRESS_HOST --cacert 2_intermediate/certs/ca-chain.cert.pem https://istio-singressgateway-istio-system.apps.82c0.example.opentlc.com/productpage
+``` curl -v -HHost:istio-singressgateway-istio-system.apps.82c0.example.opentlc.com --resolve istio-singressgateway-istio-system.apps.82c0.example.opentlc.com:443:$INGRESS_HOST --cacert 2_intermediate/certs/ca-chain.cert.pem https://istio-singressgateway-istio-system.apps.82c0.example.opentlc.com/productpage
 * Added istio-singressgateway-istio-system.apps.82c0.example.opentlc.com:443:172.29.162.78 to DNS cache
 * About to connect() to istio-singressgateway-istio-system.apps.82c0.example.opentlc.com port 443 (#0)
 *   Trying 172.29.162.78...
@@ -141,9 +140,10 @@ kind: List
 * SSL peer was unable to negotiate an acceptable set of security parameters.
 * Closing connection 0
 curl: (35) NSS: client certificate not found (nickname not specified)
-
+```
 
 - Resend the previous request by curl, this time passing as parameters your client certificate (the --cert option) and your private key (the --key option):
+```
 curl -v -HHost:istio-singressgateway-istio-system.apps.82c0.example.opentlc.com --resolve istio-singressgateway-istio-system.apps.82c0.example.opentlc.com:443:$INGRESS_HOST --cacert 2_intermediate/certs/ca-chain.cert.pem --cert 4_client/certs/istio-singressgateway-istio-system.apps.82c0.example.opentlc.com.cert.pem --key 4_client/private/istio-singressgateway-istio-system.apps.82c0.example.opentlc.com.key.pem https://istio-singressgateway-istio-system.apps.82c0.example.opentlc.com/productpage
 
 - curl -v -HHost:istio-singressgateway-istio-system.apps.82c0.example.opentlc.com --resolve istio-singressgateway-istio-system.apps.82c0.example.opentlc.com:443:$INGRESS_HOST --cacert 2_intermediate/certs/ca-chain.cert.pem --cert 4_client/certs/istio-singressgateway-istio-system.apps.82c0.example.opentlc.com.cert.pem --key 4_client/private/istio-singressgateway-istio-system.apps.82c0.example.opentlc.com.key.pem https://istio-singressgateway-istio-system.apps.82c0.example.opentlc.com/productpage
@@ -178,3 +178,4 @@ curl -v -HHost:istio-singressgateway-istio-system.apps.82c0.example.opentlc.com 
 < server: envoy
 < date: Mon, 19 Nov 2018 06:32:09 GMT
 < x-envoy-upstream-service-time: 54
+```
