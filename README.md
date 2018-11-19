@@ -24,7 +24,7 @@ oc create route passthrough istio-singressgateway --hostname=istio-singressgatew
 ```
 oc create -n istio-system secret tls istio-ingressgateway-certs --key 3_application/private/istio-singressgateway-istio-system.apps.82c0.example.opentlc.com.key.pem --cert 3_application/certs/istio-singressgateway-istio-system.apps.82c0.example.opentlc.com.cert.pem
 ```
--- Gateway definition is as follows.Make sure tls information is added for the corresponding host in server section.
+- Gateway definition is as follows.Make sure tls information is added for the corresponding host in server section.
 ```
 apiVersion: v1
 items:
