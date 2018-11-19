@@ -1,15 +1,18 @@
 # istio mTLS
--- This example is based upon https://istio.io/docs/tasks/traffic-management/secure-ingress/
+- This example is based upon https://istio.io/docs/tasks/traffic-management/secure-ingress/
 
--- git clone https://github.com/nicholasjackson/mtls-go-example
+- Install the following example
+https://docs.openshift.com/container-platform/3.11/servicemesh-install/servicemesh-install.html#installing-bookinfo-application
 
--- cd mtls-go-example
+- git clone https://github.com/nicholasjackson/mtls-go-example
 
--- ./generate.sh istio-singressgateway-istio-system.apps.82c0.example.opentlc.com xxxxxxxx
+- cd mtls-go-example
 
--- mkdir istio-singressgateway-istio-system.apps.82c0.example.opentlc.com
+- ./generate.sh istio-singressgateway-istio-system.apps.82c0.example.opentlc.com xxxxxxxx
 
--- mv 1_root 2_intermediate 3_application 4_client istio-singressgateway-istio-system.apps.82c0.example.opentlc.com
+- mkdir istio-singressgateway-istio-system.apps.82c0.example.opentlc.com
+
+- mv 1_root 2_intermediate 3_application 4_client istio-singressgateway-istio-system.apps.82c0.example.opentlc.com
 
 ```
 oc create route passthrough istio-singressgateway --hostname=istio-singressgateway-istio-system.apps.82c0.example.opentlc.com --service=istio-ingressgateway --port=443 -n istio-system
@@ -56,7 +59,7 @@ metadata:
   selfLink: ""
 ```
 
--- Check the browser
+- Check the browser-it will display the product page
    https://istio-singressgateway-istio-system.apps.82c0.example.opentlc.com/productpage
 
 ``` 
